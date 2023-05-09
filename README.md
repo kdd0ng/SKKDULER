@@ -17,6 +17,7 @@
 - git push origin branch 이름
 # !!!! 반드시 main branch가 아닌 본인의 branch로 변경 후 사용해주세요 !!!!!
 - git branch 명령어를 입력하면 현재 branch가 무엇인지 확인할 수 있습니다.
+- 만약 원래 main branch를 다시 가져오고싶다면 본인의 브랜치에서 git pull origin main 하면 됩니다.
 
 
 # 로컬 서버 구동
