@@ -6,11 +6,12 @@
 - https://hello-bryan.tistory.com/95
 
 # 2. git 설치
-
+- git 먼저 설치해주시고 아래 clone부터 진행하시면 됩니다.
 
 # Git 사용법
 - git clone https://github.com/kdd0ng/SKKDULER.git
 - git checkout -b(생성시에만) 브랜치이름(브랜치이름은 본인 영문초성으로 통일 e.g. git checkout -b kdw)
+- 코드 수정
 - git add .
 - git commit -m "커밋메시지"
 - git push origin branch 이름
