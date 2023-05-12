@@ -1,10 +1,7 @@
 <template>
   <v-sheet class="pa-12" rounded>
     <v-card class="mx-auto px-6 py-8" max-width="344">
-      <v-form
-        v-model="form"
-        @submit.prevent="onSubmit"
-      >
+      <v-form v-model="form" @submit.prevent="onSubmit">
         <v-text-field
           v-model="studentid"
           :readonly="loading"
@@ -21,9 +18,10 @@
           clearable
           label="Password"
           placeholder="Enter your password"
+          type="password"
         ></v-text-field>
 
-        <br>
+        <br />
 
         <v-btn
           :disabled="!form"
@@ -42,29 +40,42 @@
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      form: false,
-      studentid: null,
-      password: null,
-      loading: false,
-    }),
+export default {
+  props: ["studentidProp"],
+  data: () => ({
+    form: false,
+    studentid: null,
+    password: null,
+    loading: false,
+  }),
 
-    methods: {
-      onSubmit () {
-        if (!this.form) return
-
-        this.loading = true
-
-        setTimeout(() => {
-            this.loading = false;
-            this.$root.$data.studentid = this.studentid;
-            this.$router.push('/');
-        }, 2000);
-      },
-      required (v) {
-        return !!v || 'Field is required'
+  watch: {
+    studentidProp: {
+      immediate: true,
+      handler(newStudentId) {
+        this.studentid = newStudentId;
       },
     },
-  }
+  },
+
+  methods: {
+    updateStudentId(sid) {
+      this.$emit("update-studentid", sid);
+    },
+    onSubmit() {
+      if (!this.form) return;
+
+      this.loading = true;
+
+      setTimeout(() => {
+        this.loading = false;
+        this.$root.$data.studentid = this.studentid;
+        this.$router.push("/");
+      }, 2000);
+    },
+    required(v) {
+      return !!v || "Field is required";
+    },
+  },
+};
 </script>

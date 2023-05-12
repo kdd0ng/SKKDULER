@@ -2,14 +2,31 @@
   <v-card>
     <v-layout>
       <v-app-bar color="white" prominent>
-        <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon
+          variant="text"
+          @click.stop="drawer = !drawer"
+        ></v-app-bar-nav-icon>
 
         <v-toolbar-title>SKKUDULER</v-toolbar-title>
 
         <v-spacer></v-spacer>
 
-        <v-btn variant="text" icon="mdi-magnify" @click="showSearch = !showSearch"></v-btn>
-        <v-text-field v-if="showSearch" v-model="search" :label="'Search'" style="padding-top: 10px;"></v-text-field>
+        <div class="student-id-container">
+          <v-toolbar-title v-if="studentid">
+            학번: {{ studentid }}
+          </v-toolbar-title>
+        </div>
+        <v-btn
+          variant="text"
+          icon="mdi-magnify"
+          @click="showSearch = !showSearch"
+        ></v-btn>
+        <v-text-field
+          v-if="showSearch"
+          v-model="search"
+          :label="'Search'"
+          style="padding-top: 10px"
+        ></v-text-field>
         <v-btn vriant="text" icon="mdi-bell"></v-btn>
         <v-btn variant="text" icon="mdi-login" @click="gotologin"></v-btn>
       </v-app-bar>
@@ -30,7 +47,9 @@
               </v-flex>
 
               <v-flex>
-                <v-list-item-title class="ml-2">{{ item.title }}</v-list-item-title>
+                <v-list-item-title class="ml-2">{{
+                  item.title
+                }}</v-list-item-title>
               </v-flex>
             </v-layout>
           </v-list-item>
@@ -42,6 +61,10 @@
       </v-main>
     </v-layout>
   </v-card>
+  <login-form
+    :studentid="studentid"
+    @update-studentid="updateStudentID"
+  ></login-form>
 </template>
 
 <script>
@@ -50,39 +73,40 @@ export default {
     drawer: true,
     group: null,
     selectedIndex: 0,
+    studentid: null,
     items: [
       {
-        title: '홈',
-        value: 'home',
-        icon: 'mdi-home',
+        title: "홈",
+        value: "home",
+        icon: "mdi-home",
       },
       {
-        title: '캘린더',
-        value: 'calendar',
-        icon: 'mdi-calendar-month',
+        title: "캘린더",
+        value: "calendar",
+        icon: "mdi-calendar-month",
       },
       {
-        title: '친구',
-        value: 'friend',
-        icon: 'mdi-account-group',
+        title: "친구",
+        value: "friend",
+        icon: "mdi-account-group",
       },
       {
-        title: '검색하기',
-        value: 'search',
-        icon: 'mdi-magnify',
+        title: "검색하기",
+        value: "search",
+        icon: "mdi-magnify",
       },
       {
-        title: '일정주최',
-        value: 'host',
-        icon: 'mdi-volume-high',
+        title: "일정주최",
+        value: "host",
+        icon: "mdi-volume-high",
       },
     ],
     showSearch: false,
-    search: '',
+    search: "",
     studentid: null,
   }),
   created() {
-    this.$router.push({ name: 'home' });
+    this.$router.push({ name: "home" });
   },
 
   methods: {
@@ -94,12 +118,13 @@ export default {
       //console.log("Current route name: ", this.$route.name);
       //console.log("Clicked menu value: ", item.value);
     },
-    gotologin(){
-      this.$router.push('/login');
+    gotologin() {
+      this.$router.push("/login");
+    },
+    updateStudentID(id) {
+      this.studentid = id;
     },
   },
-
-  
 };
 </script>
 
@@ -107,5 +132,7 @@ export default {
 .selected {
   color: red;
 }
+.student-id-container {
+  margin-right: 10px;
+}
 </style>
-
