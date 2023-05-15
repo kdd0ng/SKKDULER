@@ -5,6 +5,7 @@ import FriendView from '../views/FriendView.vue'
 import SearchView from '../views/SearchView.vue'
 import HostView from '../views/HostView.vue'
 import LoginView from '../views/LoginView.vue'
+import itemSearchView from '../views/itemSearchView.vue'
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginView
+  },
+  {
+    path:'/search/:id',
+    name: 'card',
+    component: itemSearchView
   }
 
 ]
