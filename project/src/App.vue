@@ -24,10 +24,12 @@
         <v-text-field
           v-if="showSearch"
           v-model="search"
-          :label="'Search'"
+          dense
+          outlined
+          label="Search"
           style="padding-top: 10px"
         ></v-text-field>
-        <v-btn vriant="text" icon="mdi-bell"></v-btn>
+        <v-btn variant="text" icon="mdi-bell"></v-btn>
         <v-btn variant="text" icon="mdi-login" @click="gotologin"></v-btn>
       </v-app-bar>
 
