@@ -171,11 +171,6 @@ export default {
       }
     },
 
-    highlight(text) {
-      const highlightText = `<span class="highlight">${this.search}</span>`;
-      const regex = new RegExp(this.search, "gi");
-      return text.replace(regex, highlightText);
-    },
     hideSearch(e) {
       if (!this.$refs.searchBar.$el.contains(e.target)) {
         this.showSearch = false;
@@ -234,9 +229,5 @@ export default {
 <style>
 .button-top-margin {
   margin-top: 100px;
-}
-.highlight {
-  background-color: greenyellow;
-  padding: 2px;
 }
 </style>
