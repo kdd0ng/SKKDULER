@@ -161,7 +161,7 @@ import axios from 'axios'
     },
 
     async created() {
-      axios.post('/api/host/create', {userid: "kum", title: "a", start_date: "b", end_date: "c", location: "d", description: "e", total: 1 }, {'Content-type': 'application/json'})
+      axios.post('http://127.0.0.1:8000/api/host/create', {userid: "kum", title: "a", start_date: "b", end_date: "c", location: "d", description: "e", total: 1 }, {'Content-type': 'application/json'})
   .then(res => {
     console.log(res.data)
   })
