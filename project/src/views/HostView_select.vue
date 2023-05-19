@@ -71,9 +71,11 @@
   </v-row>
 
   <v-row>
-    <v-btn color="primary" icon="mdi-plus" size="small" @click="gotoHostview_create"></v-btn>
+    <v-btn color="primary" icon="mdi-plus" size="small"></v-btn>
   </v-row>
 
+  <v-row>
+  </v-row>
   <!--<span>선택 value: {{ selected }}</span>-->
   </v-container>
 
@@ -135,7 +137,7 @@
             views: 0,
           },
         ],
-      //dialog: false,
+      dialog: false,
 
     }),
 
@@ -148,9 +150,6 @@
           this.loaded = true
         }, 2000)
       },
-      gotoHostview_create(){
-      this.$router.push('/host_create');
-    },
     },
 
     computed: {

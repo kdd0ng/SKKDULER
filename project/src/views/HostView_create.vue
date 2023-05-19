@@ -2,76 +2,31 @@
 
   <v-container>
     <v-row>
-        <h1>&nbsp;&nbsp;학우들이 주최한 일정 살펴보기</h1>
+        <h1>&nbsp;&nbsp;내가 일정을 만들 수도 있어요!</h1>
     </v-row>
-    <v-row>
-      <v-col cols="4"> 
+     
+  <v-row>
+    <v-col cols="4"> 
         <v-text-field
           :loading="loading"
           density="compact"
-          variant="solo"
-          label="해시태그 및  키워드로 검색할 수 있습니다(제목/작성자)"
+          variant="tonal"
+          label="일정명을 입력하세요"
           v-model="filters"
-          append-inner-icon="mdi-magnify"
           single-line
           hide-details
           @click:append-inner="onClick"
         ></v-text-field>
       </v-col>
-      <v-col cols="6"></v-col>
-      
-      <v-col cols="2">  
-        <select v-model="selected">
-          <option
-            v-for="(item, index) in selectList"
-            :key="index"
-            :value="item.value"
-            >{{ item.name }}</option
-          >
-        </select>     
-      </v-col>
   </v-row>
+  
+  <v-row>
     
-  <v-row>
-
-    <v-table>
-    <thead>
-      <tr>
-        <th class="text-left">
-          제목
-        </th>
-        <th class="text-left">
-          개최일
-        </th>
-        <th class="text-left">
-          작성자
-        </th>
-        <th class="text-left">
-          참여/모집인원
-        </th>
-        <th class="text-left">
-          조회수
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="item in filteredRows"
-        :key="item.name"
-      >
-        <td>{{ item.title }}</td>
-        <td>{{ item.date }}</td>
-        <td>{{ item.writer }}</td>
-        <td>{{ item.personnel }}</td>
-        <td>{{ item.views }}</td>
-      </tr>
-    </tbody>
-  </v-table>
 
   </v-row>
 
   <v-row>
-    <v-btn color="primary" icon="mdi-plus" size="small" @click="gotoHostview_create"></v-btn>
+    <v-btn color="primary" icon="mdi-plus" size="small" @click="gotoHostview"></v-btn>
   </v-row>
 
   <!--<span>선택 value: {{ selected }}</span>-->
@@ -135,7 +90,7 @@
             views: 0,
           },
         ],
-      //dialog: false,
+      dialog: false,
 
     }),
 
@@ -148,9 +103,9 @@
           this.loaded = true
         }, 2000)
       },
-      gotoHostview_create(){
-      this.$router.push('/host_create');
-    },
+      gotoHostview(){
+      this.$router.push('/host');
+      }
     },
 
     computed: {
