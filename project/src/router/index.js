@@ -26,7 +26,8 @@ const routes = [
   {
     path: '/search',
     name: 'search',
-    component: SearchView
+    component: SearchView,
+    props: true,
   },
   {
     path: '/host',
@@ -39,7 +40,7 @@ const routes = [
     component: LoginView
   },
   {
-    path:'/search/:id',
+    path:'/search/id=:id',
     name: 'card',
     component: itemSearchView
   }

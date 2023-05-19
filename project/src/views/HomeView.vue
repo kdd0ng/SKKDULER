@@ -14,7 +14,6 @@
         </a>
       </v-col>
     </v-row>
-
     <v-row>
       <v-divider></v-divider>
       <br>
@@ -166,7 +165,17 @@ import mainimg9 from '@/assets/main_9.jpg';
     methods: {
       onPageChange(page) {
         this.page = page;
-      }
+      },
+      handleClick() {
+        fetch("http://localhost:8000/api/search/id=34").then((response) => response.json()).then((data) =>{
+        // 응답 처리
+        console.log(data);
+      })
+      .catch((error) => {
+        // 에러 처리
+        console.error(error);
+      });
+  },
     }
   }
 </script>

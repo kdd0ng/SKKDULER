@@ -30,22 +30,26 @@
         <div class="outer-box">
           <v-card color="#e0ddd5">
             <div class="d-flex" style="margin: 20px;">
-                <v-img src="require('@/assets/main_1.jpg')" max-width="600px"></v-img>
+                <v-img :src="item.src" max-width="600px"></v-img>
             <div>
             <v-card-item>
             <div>
                 <div class="text-h12 mt-12 mb-4" style="font-weight: bold">
-                    주제 : 
+                    주제 : {{ item.title }}
                 </div>
+                <br><br>
                 <div class="text-h12 mb-4" style="font-weight: bold">
-                    일시 : 
+                    일시 : {{ item.date }}
                 </div>
+                <br><br>
                 <div class="text-h12 mb-4" style="font-weight: bold">
-                    장소 : 
+                    장소 : {{ item.location }}
                 </div>
+                <br><br>
                 <div class="text-h12 mb-4" style="font-weight: bold">
-                    링크 : 
+                    링크 : <a :href="item.url">{{ item.url }}</a>
                 </div>
+                <br><br>
                 <div>
                     <v-card color="#33d18f" style="padding: 10px; font-weight: bold">
                         <v-icon>mdi-calendar-plus</v-icon>
@@ -147,20 +151,78 @@
 </template>
 
 <script>
-import mainimg1 from '@/assets/main_1.jpg';
+import searchimg1 from '@/assets/1.png';
+import searchimg2 from '@/assets/2.png';
+import searchimg3 from '@/assets/3.png';
+import searchimg4 from '@/assets/4.png';
+import searchimg5 from '@/assets/5.png';
+import searchimg6 from '@/assets/6.png';
+import searchimg7 from '@/assets/7.png';
+import searchimg8 from '@/assets/8.png';
+import searchimg9 from '@/assets/9.jpg';
+import searchimg10 from '@/assets/10.png';
+import searchimg11 from '@/assets/11.png';
+import searchimg12 from '@/assets/12.png';
+import searchimg13 from '@/assets/13.png';
+import searchimg14 from '@/assets/14.png';
+import searchimg15 from '@/assets/15.png';
+import searchimg16 from '@/assets/16.png';
+import searchimg17 from '@/assets/17.png';
+import searchimg18 from '@/assets/18.png';
+import searchimg19 from '@/assets/19.png';
+import searchimg20 from '@/assets/20.png';
+import searchimg21 from '@/assets/21.png';
+import searchimg22 from '@/assets/22.png';
+import searchimg23 from '@/assets/23.png';
+import searchimg24 from '@/assets/24.png';
+import searchimg25 from '@/assets/25.png';
+import searchimg26 from '@/assets/26.png';
+import searchimg27 from '@/assets/27.png';
+import searchimg28 from '@/assets/28.png';
+import searchimg29 from '@/assets/29.png';
+import searchimg30 from '@/assets/30.png';
+import searchimg31 from '@/assets/31.png';
+import searchimg32 from '@/assets/32.png';
+import searchimg33 from '@/assets/33.png';
+import searchimg34 from '@/assets/34.png';
+import searchimg35 from '@/assets/35.png';
+import searchimg36 from '@/assets/36.png';
+import searchimg37 from '@/assets/37.png';
+import searchimg38 from '@/assets/38.png';
+import searchimg39 from '@/assets/39.png';
+import searchimg40 from '@/assets/40.png';
+import searchimg41 from '@/assets/41.png';
+import searchimg42 from '@/assets/42.png';
+import searchimg43 from '@/assets/43.png';
+import searchimg44 from '@/assets/44.png';
+import searchimg45 from '@/assets/45.png';
+import searchimg46 from '@/assets/46.png';
+import searchimg47 from '@/assets/47.png';
+import searchimg48 from '@/assets/48.png';
+import searchimg49 from '@/assets/49.png';
+import searchimg50 from '@/assets/50.png';
+
 export default {
   data() {
     return {
       dialog: false,
       text: '',
       toggleValue: false,
-      toggleLabel: '비공개',
+      toggleLabel: '공개',
       commentText: '',
       comments: [
         { text: '언제 마치나요?', author: '권동욱', showReply: false, replyText: '' },
         { text: '장소가 바뀌었나요?', author: '김원종', showReply: false, replyText: '' },
       ],
+      item:{},
     };
+  },
+  created(){
+    const url = new URL(window.location.href);
+    const pathname = url.pathname; // "/search/id=1"
+    const id = pathname.substring(pathname.lastIndexOf('=') + 1);
+    //console.log(id);
+    this.fetchData(id);
   },
   watch: {
     toggleValue(value){
@@ -193,6 +255,26 @@ export default {
           author: '담당자',
         });
       }
+    },
+    fetchData(id) {
+      fetch(`http://localhost:8000/api/search/id=${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          this.item = {
+            id: data.id,
+            title: data.title,
+            date: data.date,
+            location: data.location,
+            url: data.url,
+            src: eval(`searchimg${id}`),
+            // 필요한 항목들을 가져와서 객체에 저장
+          };
+          
+        })
+      
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 };
