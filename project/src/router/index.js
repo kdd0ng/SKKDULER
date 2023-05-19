@@ -4,6 +4,7 @@ import CalendarView from '../views/CalendarView.vue'
 import FriendView from '../views/FriendView.vue'
 import SearchView from '../views/SearchView.vue'
 import HostView from '../views/HostView.vue'
+import HostView_create from '../views/HostView_create.vue'
 import LoginView from '../views/LoginView.vue'
 
 const routes = [
@@ -31,6 +32,11 @@ const routes = [
     path: '/host',
     name: 'host',
     component: HostView
+  },
+  {
+    path: '/host_create',
+    name: 'host_create',
+    component: HostView_create
   },
   {
     path: '/login',

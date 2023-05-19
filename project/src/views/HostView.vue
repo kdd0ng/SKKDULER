@@ -78,10 +78,11 @@
   </v-container>
 
 
+
 </template>
 
 <script>
-
+import axios from 'axios'
 //Vue.component('v-selector',vSelect)
   export default {
     data: () => ({
@@ -136,6 +137,7 @@
           },
         ],
       //dialog: false,
+      listItems: [],
 
     }),
 
@@ -151,8 +153,28 @@
       gotoHostview_create(){
       this.$router.push('/host_create');
     },
+
+    async getData() {
+        const res = await fetch("http://127.0.0.1:8000/api/host/");
+        const finalRes = await res.json();
+        this.listItems = finalRes;
     },
 
+    async created() {
+      axios.post('http://127.0.0.1:8000/api/host/create', { userid: "kum", title: "a", start_date: "b", end_date: "c", location: "d", description: "e", total: "1" })
+  .then(res => {
+    console.log(res.data)
+  })
+}
+
+
+    
+    },
+    mounted() {
+      this.getData()
+      this.created()
+      console.log(JSON.stringify(this.listItems))
+    },
     computed: {
   filteredRows() {
     return this.rows.filter(row => {
