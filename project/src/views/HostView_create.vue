@@ -12,7 +12,7 @@
             density="compact"
             variant="solo"
             label="일정명을 입력하세요"
-            v-model="filters"
+            v-model="title"
             single-line
             hide-details
             @click:append-inner="onClick"
@@ -142,7 +142,7 @@
             density="compact"
             variant="solo"
             label=""
-            v-model="filters"
+            v-model="location"
             single-line
             hide-details
             @click:append-inner="onClick"
@@ -161,7 +161,7 @@
             density="compact"
             variant="solo"
             label=""
-            v-model="filters"
+            v-model="description"
             single-line
             hide-details
             @click:append-inner="onClick"
@@ -180,7 +180,7 @@
             density="compact"
             variant="solo"
             label="5"
-            v-model="filters"
+            v-model="total"
             single-line
             hide-details
             @click:append-inner="onClick"
@@ -394,7 +394,10 @@
         { name: "30분", value: "30" },
         { name: "45분", value: "45" },
       ],
-      filters:"",
+      title:"",
+      location:"",
+      description:"",
+      total:"",
       rows: [
           {
             title: 'Frozen Yogurt',
