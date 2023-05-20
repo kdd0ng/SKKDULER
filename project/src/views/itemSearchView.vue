@@ -128,7 +128,7 @@
                         </v-dialog>
                     </v-col>
                     <v-col cols="4" class="text-center">
-                        <v-btn variant="outlined" class="btn2">
+                        <v-btn variant="outlined" class="btn2" @click="addToMySchedule">
                         내 일정에 추가
                         </v-btn>
                     </v-col>
@@ -227,6 +227,8 @@ export default {
   watch: {
     toggleValue(value){
         this.toggleLabel = value ? '비공개' : '공개';
+        this.item.isPrivate = value ? 1 : 0;
+        console.log(`isPrivate 값: ${this.item.isPrivate}`);
     }
   },
   methods: {
@@ -276,6 +278,31 @@ export default {
           console.error(error);
         });
     },
+    addToMySchedule() {
+    const userId = 3; 
+    const id = this.item.id;
+    const isPrivate = this.toggleValue ? 1 : 0;
+    const url = `http://127.0.0.1:8000/api/search/add?userid=${userId}&id=${id}&isPrivate=${isPrivate}`;
+    
+    console.log('PUT 요청 URL:', url);
+    fetch(url, {
+      method: 'PUT',
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          // 실패한 응답 처리
+          throw new Error('요청이 실패했습니다.');
+        }
+      })
+      .then((data) => {
+        console.log('PUT 요청이 성공적으로 완료되었습니다.', data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  },
   },
 };
 </script>
