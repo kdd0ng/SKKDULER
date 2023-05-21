@@ -20,10 +20,7 @@
             {{ result.name }}
           </v-card-title>
           <v-card-subtitle> Student ID: {{ result.id }} </v-card-subtitle>
-          <v-card-text> Department: {{ result.department }} </v-card-text>
         </v-card>
-        <!-- 친구 리스트에 없는 친구라면 추가하기 버튼 띄우기 -->
-        <!-- 추가하기 버튼을 누르면 친구 신청 -->
       </v-col>
     </v-row>
 
@@ -41,7 +38,6 @@
                 {{ friend.name }}
               </v-card-title>
               <v-card-subtitle> Student ID: {{ friend.id }} </v-card-subtitle>
-              <v-card-text> Department: {{ friend.department }} </v-card-text>
             </v-card>
           </v-col>
         </v-row>
@@ -57,52 +53,105 @@
 
     <v-toolbar dense flat color="green">
       <v-toolbar-title class="white--text">Friend Requests</v-toolbar-title>
+      <v-btn
+        variant="text"
+        icon="mdi-magnify"
+        @click="toggleOtherSearch"
+      ></v-btn>
+      <v-text-field
+        v-if="showOtherSearch"
+        v-model="secondSearchInput"
+        class="mr-4"
+        label="찾고 싶은 친구의 학번을 입력하세요"
+        single-line
+        hide-details
+        ref="otherSearchBar"
+      ></v-text-field>
     </v-toolbar>
 
-    <v-row class="my-2">
-      <v-col cols="1" class="text-left button-top-margin">
-        <v-btn
-          icon
-          @click="prevRequestPage"
-          :disabled="currentRequestPage === 1"
-        >
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-      </v-col>
-      <v-col cols="10">
-        <v-row>
-          <v-col v-for="(request, i) in paginatedRequests" :key="i" cols="4">
-            <v-card>
-              <v-card-title>
-                {{ request.name }}
-              </v-card-title>
-              <v-card-subtitle> Student ID: {{ request.id }} </v-card-subtitle>
-              <v-card-text> Department: {{ request.department }} </v-card-text>
-              <v-card-actions>
-                <v-btn
-                  variant="outlined"
-                  color="green"
-                  @click="approveRequest(i)"
-                  >수락</v-btn
-                >
-                <v-btn variant="outlined" color="red" @click="declineRequest(i)"
-                  >거절</v-btn
-                >
-              </v-card-actions>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col cols="1" class="text-right button-top-margin">
-        <v-btn
-          icon
-          @click="nextRequestPage"
-          :disabled="currentRequestPage === numberOfRequestPages"
-        >
-          <v-icon>mdi-chevron-right</v-icon>
-        </v-btn>
+    <v-row class="mt-5" v-if="secondSearchInput && !isFriend">
+      <v-col cols="4">
+        <v-card>
+          <v-card-title>{{ secondSearchInput }}</v-card-title>
+          <v-card-subtitle
+            >친구요청을 보내려면 아래 버튼을 클릭하세요.</v-card-subtitle
+          >
+          <v-card-actions>
+            <v-btn color="primary" @click="addFriend">+</v-btn>
+          </v-card-actions>
+        </v-card>
       </v-col>
     </v-row>
+    <v-row class="my-2" v-else
+      ><v-row class="my-2">
+        <v-col cols="1" class="text-left button-top-margin">
+          <v-btn
+            icon
+            @click="prevRequestPage"
+            :disabled="currentRequestPage === 1"
+          >
+            <v-icon>mdi-chevron-left</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col cols="10">
+          <v-row>
+            <v-col v-for="(request, i) in paginatedRequests" :key="i" cols="4">
+              <v-card>
+                <v-card-title>
+                  {{ request.name }}
+                </v-card-title>
+                <v-card-subtitle>
+                  Student ID: {{ request.id }}
+                </v-card-subtitle>
+                <v-card-actions>
+                  <v-btn
+                    variant="outlined"
+                    color="green"
+                    @click="approveRequest(i)"
+                    >수락</v-btn
+                  >
+                  <v-btn
+                    variant="outlined"
+                    color="red"
+                    @click="declineRequest(i)"
+                    >거절</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col cols="1" class="text-right button-top-margin">
+          <v-btn
+            icon
+            @click="nextRequestPage"
+            :disabled="currentRequestPage === numberOfRequestPages"
+          >
+            <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-row>
+    <!-- <v-btn color="white" @click="searchNonFriend">Search</v-btn> -->
+
+    <!-- 친구 리스트에 없는 친구라면 추가하기 버튼 띄우기 -->
+    <!-- 추가하기 버튼을 누르면 친구 신청 -->
+    <!-- <v-row class="mt-5" v-if="otherSearch && searchResults.length">
+      <v-col v-for="(result, i) in searchResults" :key="i" cols="4">
+        <v-card>
+          <v-card-title>
+            {{ result.name }}
+          </v-card-title>
+          <v-card-subtitle> Not Yet a Friend </v-card-subtitle>
+          <v-card-actions>
+            <v-btn variant="outlined" color="blue" @click="addFriend(result)">
+              <v-icon>mdi-plus</v-icon>
+              Add Friend
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row> -->
   </v-container>
 </template>
 
@@ -112,6 +161,9 @@ export default {
     return {
       search: "",
       showSearch: false,
+      showOtherSearch: false,
+      secondSearchInput: null,
+
       friends: [
         { name: "권동욱", id: "123", department: "TEST" },
         { name: "금찬후", id: "456", department: "TEST" },
@@ -135,6 +187,87 @@ export default {
     };
   },
   methods: {
+    // 현재 로그인한 사용자 id 받음
+    fetchCurrentUser() {
+      this.$root.$on("login-success", (studentid) => {
+        this.studentid = studentid;
+        this.fetchFriends();
+      });
+    },
+    // 현재 로그인한 사용자의 친구 목록 받음
+    fetchFriends() {
+      if (!this.studentid) {
+        return;
+      }
+
+      fetch(
+        `http://localhost:8000/api/friends/friend_list?id=${this.studentid}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data) {
+            this.friends = data;
+            console.log(this.studentid);
+          }
+        })
+        .catch((err) => console.error(err));
+    },
+
+    showFriendList() {
+      this.fetchCurrentUser();
+    },
+
+    searchNonFriend() {
+      if (!this.otherSearch) {
+        return;
+      }
+
+      fetch(
+        `http://localhost:8000/api/friends/friend_list?id=${this.studentid}`,
+        {
+          method: "GET",
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data) {
+            this.friends = data;
+            const nonFriend = this.friends.find(
+              (friend) => friend.name === this.otherSearch
+            );
+
+            if (!nonFriend) {
+              const newFriend = {
+                name: this.otherSearch,
+                id: null,
+              };
+              this.searchResults.push(newFriend);
+            }
+          }
+        })
+        .catch((err) => console.error(err));
+    },
+    isFriend(result) {
+      return this.friends.some(
+        (friend) => friend.name.toLowerCase() === result.name.toLowerCase()
+      );
+    },
+    addFriend() {
+      this.friends.push(this.secondSearchInput);
+    },
+    // addFriend(result) {
+    //   this.friends.push(result);
+    //   const index = this.searchResults.findIndex(
+    //     (item) => item.name.toLowerCase() === result.name.toLowerCase()
+    //   );
+    //   if (index !== -1) {
+    //     this.searchResults.splice(index, 1);
+    //   }
+    // },
+    addFriendRequest(result) {
+      console.log(result.name);
+    },
+
     prevPage() {
       if (this.currentPage > 1) this.currentPage--;
     },
@@ -185,14 +318,44 @@ export default {
         }, 0);
       }
     },
-  },
-  computed: {
-    searchResults() {
+    toggleOtherSearch() {
+      if (this.showOtherSearch) {
+        this.showOtherSearch = false;
+      } else {
+        setTimeout(() => {
+          this.showOtherSearch = true;
+        }, 0);
+      }
+    },
+    filteredSearchResults() {
       if (!this.search) {
         return [];
       }
-      return this.friends.filter((friend) =>
-        friend.name.toLowerCase().includes(this.search.toLowerCase())
+      return this.searchResults.filter((result) =>
+        result.id.includes(this.search.toLowerCase())
+      );
+    },
+  },
+  watch: {
+    studentid(newStudentId) {
+      this.fetchFriends();
+    },
+  },
+
+  computed: {
+    isFriend() {
+      return this.friends.includes(this.secondSearchInput);
+    },
+    searchResults() {
+      if (!this.otherSearch) {
+        return [];
+      }
+      return this.searchResults.filter(
+        (result) =>
+          !this.friends.some(
+            //name -> id로 변경
+            (friend) => friend.name.toLowerCase() === result.name.toLowerCase()
+          )
       );
     },
     filteredFriends() {
@@ -222,6 +385,9 @@ export default {
   },
   beforeDestroy() {
     document.removeEventListener("click", this.hideSearch);
+  },
+  created() {
+    this.fetchFriends();
   },
 };
 </script>
