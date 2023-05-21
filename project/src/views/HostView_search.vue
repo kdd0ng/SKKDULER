@@ -2,90 +2,105 @@
 
   <v-container>
     <v-row>
+      <v-col cols="2">
+        <a href="https://cs.skku.edu/ko/">
+          <v-img src="https://cs.skku.edu/img/topLogo_new_ko.png" width="300px"></v-img>
+        </a>
+      </v-col>
+      <v-col cols="8"></v-col>
+      <v-col cols="2">
+        <a href="https://cs.skku.edu/ko/">
+          <v-img src="https://cs.skku.edu/img/sw_convergence.png" width="300px"></v-img>
+        </a>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-divider></v-divider>
+      <br>
+    </v-row>
+
+    <v-row>
         <h1>&nbsp;&nbsp;학우들이 주최한 일정 살펴보기</h1>
     </v-row>
-  <div class="text-center">
     <v-row>
-      <v-col cols="5"> 
-          {{ listItems.title }}
-        </v-col>
+        <h1>&nbsp;&nbsp;</h1>
     </v-row>
-    <v-row>
-      <v-divider></v-divider>
-      <br>
-    </v-row>
-    <v-row>
-      <h3>&nbsp;&nbsp;날짜 및 시간</h3>
-      <h3 v-if="listItems.start_date">{{ listItems.start_date.substr(0,4) }}</h3>
-      <h3>&nbsp;&nbsp;년</h3>
-      <h3 v-if="listItems.start_date">{{ listItems.start_date.substr(5,2) }}</h3>
-      <h3>&nbsp;&nbsp;월</h3>
-      <h3 v-if="listItems.start_date">{{ listItems.start_date.substr(8,2) }}</h3>
-      <h3>&nbsp;&nbsp;일</h3>
-      <h3 v-if="listItems.start_date">{{ listItems.start_date.substr(11,2) }}</h3>
-      <h3>&nbsp;&nbsp;시</h3>
-      <h3 v-if="listItems.start_date">{{ listItems.start_date.substr(14,2) }}</h3>
-      <h3>&nbsp;&nbsp;분</h3>
-      <h3>&nbsp;&nbsp;~</h3>
-      <!--end 시간-->
-      <h3 v-if="listItems.end_date">{{ listItems.end_date.substr(0,4) }}</h3>
-      <h3>&nbsp;&nbsp;년</h3>
-      <h3 v-if="listItems.end_date">{{ listItems.end_date.substr(5,2) }}</h3>
-      <h3>&nbsp;&nbsp;월</h3>
-      <h3 v-if="listItems.end_date">{{ listItems.end_date.substr(8,2) }}</h3>
-      <h3>&nbsp;&nbsp;일</h3>
-      <h3 v-if="listItems.end_date">{{ listItems.end_date.substr(11,2) }}</h3>
-      <h3>&nbsp;&nbsp;시</h3>
-      <h3 v-if="listItems.end_date">{{ listItems.end_date.substr(14,2) }}</h3>
-      <h3>&nbsp;&nbsp;분</h3>
-    </v-row>
-    <v-row>
-      <v-divider></v-divider>
-      <br>
-    </v-row>
-    <v-row>
-      <h3>&nbsp;&nbsp;장소</h3>
-      <v-col cols="5"> 
-        {{ listItems.location }}
-        </v-col>
-    </v-row>
-    <v-row>
-      <v-divider></v-divider>
-      <br>
-    </v-row>
-    <v-row>
-      <h3>&nbsp;&nbsp;설명</h3>
-      <v-col cols="5"> 
-        {{ listItems.memo }}
-        </v-col>
-    </v-row>
-    <v-row>
-      <v-divider></v-divider>
-      <br>
-    </v-row>
-    <v-row>
-      <h3>&nbsp;&nbsp;모집인원</h3>
-      <v-col cols="1"> 
-        {{ listItems.total }}
-        </v-col>
-          <h3>&nbsp;&nbsp;명</h3>    
-    </v-row>
-    <v-row>
-      <v-divider></v-divider>
-      <br>
-    </v-row>
-    <v-row>
-      <v-btn color="primary" size="small" @click="gotoHostview">돌아가기</v-btn>
-      <v-col cols="9"></v-col>
-      <v-btn color="primary" size="small" @click="putData">내 일정에 추가하기</v-btn>
-    </v-row>
-  </div>
 <!--
   <v-row><h10>{{ request_URL }}</h10></v-row>
   <v-row><h10>{{ request_URL2 }}</h10></v-row>
   <h1>{{ deliver }}</h1>
 -->
+<v-card
+    class="mx-auto"
+    max-width="750"
+    variant="outlined"
+  >
+    <v-card-item>
+      <div>
+        <div class="text-h7 mb-1">
+          {{ listItems.title }}
+        </div>
+        <v-divider></v-divider>
+        <div class="text-h6 mb-1">
+          <v-icon icon="mdi-calendar-month"></v-icon> 날짜 및 시간
+        </div>
+        <div class="text-caption" v-if="listItems.start_date">{{ listItems.start_date.substr(0,4) }}년 {{ listItems.start_date.substr(5,2) }}월 {{ listItems.start_date.substr(8,2) }}일 {{ listItems.start_date.substr(11,2) }}시 {{ listItems.start_date.substr(14,2) }}분 - {{ listItems.end_date.substr(0,4) }}년 {{ listItems.end_date.substr(5,2) }}월 {{ listItems.end_date.substr(8,2) }}일 {{ listItems.end_date.substr(11,2) }}시 {{ listItems.end_date.substr(14,2) }}분</div>
+        <v-divider></v-divider>
+        <div class="text-h6 mb-1">
+          <v-icon icon="mdi-web"></v-icon> 장소
+        </div>
+        <div class="text-caption">{{ listItems.location }}</div>
+        <v-divider></v-divider>
+        <div class="text-h6 mb-1">
+          <v-icon icon="mdi-note-outline"></v-icon> 설명
+        </div>
+        <div class="text-caption">{{ listItems.memo }}</div>
+        <v-divider></v-divider>
+        <div class="text-h6 mb-1">
+          <v-icon icon="mdi-account-group"></v-icon> 모집인원
+        </div>
+        <div class="text-caption">{{ listItems.total }}</div>
+        <v-divider></v-divider>
+      </div>
+    </v-card-item>
 
+    <v-card-actions>
+      <v-btn color="primary" variant="outlined" @click="gotoHostview">
+        돌아가기
+      </v-btn>
+      <v-btn color="primary" variant="outlined" @click="putData">
+        내 일정에 추가하기
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+
+  <v-row>
+      <h1>&nbsp;&nbsp;</h1>
+  </v-row>
+  <v-row>
+      <h1>&nbsp;&nbsp;</h1>
+  </v-row>
+  <v-row>
+      <h1>&nbsp;&nbsp;</h1>
+  </v-row>
+  <v-row>
+      <h1>&nbsp;&nbsp;</h1>
+  </v-row>
+  <v-row>
+      <h1>&nbsp;&nbsp;</h1>
+  </v-row>
+  <v-row>
+      <h1>&nbsp;&nbsp;</h1>
+  </v-row>
+  <v-row>
+      <h1>&nbsp;&nbsp;</h1>
+  </v-row>
+  <v-row>
+      <h1>&nbsp;&nbsp;</h1>
+  </v-row>
+  <v-row>
+      <h1>&nbsp;&nbsp;</h1>
+  </v-row>
 
   </v-container>
 
