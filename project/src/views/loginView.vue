@@ -114,6 +114,22 @@ export default {
     updateStudentId(sid) {
       this.$emit("update-studentid", sid);
     },
+    async fetchStudentId() {
+      try {
+        let response = await fetch(
+          `http://localhost:8000/api/sign_login/login?id=${this.studentid}&password=${this.password}`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        } else {
+          let data = await response.json();
+          this.studentid = data.studentid; // Assuming the response object has a studentid property
+          this.updateStudentId(this.studentid);
+        }
+      } catch (error) {
+        console.log("There was a problem with fetch operation: ", error);
+      }
+    },
     onSubmit() {
       if (!this.form) return;
 
@@ -159,6 +175,9 @@ export default {
     required(v) {
       return !!v || "Field is required";
     },
+  },
+  created() {
+    this.fetchStudentId();
   },
 };
 </script>

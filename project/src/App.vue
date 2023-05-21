@@ -12,9 +12,14 @@
         <v-spacer></v-spacer>
 
         <div class="student-id-container">
-          <v-toolbar-title v-if="studentid">
+          <!-- <v-toolbar-title v-if="studentid">
             학번: {{ studentid }}
-          </v-toolbar-title>
+          </v-toolbar-title> -->
+          <Login
+            @update-studentid="updateStudentId"
+            :studentidProp="studentid"
+          />
+          <div>학번: {{ studentid }}</div>
         </div>
         <v-btn
           variant="text"
@@ -70,6 +75,8 @@
 </template>
 
 <script>
+import Login from "./views/loginView.vue";
+
 export default {
   data: () => ({
     drawer: true,
@@ -123,8 +130,8 @@ export default {
     gotologin() {
       this.$router.push("/login");
     },
-    updateStudentID(id) {
-      this.studentid = id;
+    updateStudentID(sid) {
+      this.studentid = sid;
     },
   },
 };

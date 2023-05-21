@@ -132,26 +132,6 @@
         </v-col>
       </v-row>
     </v-row>
-    <!-- <v-btn color="white" @click="searchNonFriend">Search</v-btn> -->
-
-    <!-- 친구 리스트에 없는 친구라면 추가하기 버튼 띄우기 -->
-    <!-- 추가하기 버튼을 누르면 친구 신청 -->
-    <!-- <v-row class="mt-5" v-if="otherSearch && searchResults.length">
-      <v-col v-for="(result, i) in searchResults" :key="i" cols="4">
-        <v-card>
-          <v-card-title>
-            {{ result.name }}
-          </v-card-title>
-          <v-card-subtitle> Not Yet a Friend </v-card-subtitle>
-          <v-card-actions>
-            <v-btn variant="outlined" color="blue" @click="addFriend(result)">
-              <v-icon>mdi-plus</v-icon>
-              Add Friend
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row> -->
   </v-container>
 </template>
 
@@ -163,15 +143,17 @@ export default {
       showSearch: false,
       showOtherSearch: false,
       secondSearchInput: null,
+      currentUser: null,
+      friends: [],
 
-      friends: [
-        { name: "권동욱", id: "123", department: "TEST" },
-        { name: "금찬후", id: "456", department: "TEST" },
-        { name: "김원종", id: "789", department: "TEST" },
-        { name: "신현주", id: "101", department: "TEST" },
-        { name: "송정현", id: "112", department: "TEST" },
-        { name: "조민재", id: "131", department: "TEST" },
-      ],
+      // friends: [
+      //   { name: "권동욱", id: "123", department: "TEST" },
+      //   { name: "금찬후", id: "456", department: "TEST" },
+      //   { name: "김원종", id: "789", department: "TEST" },
+      //   { name: "신현주", id: "101", department: "TEST" },
+      //   { name: "송정현", id: "112", department: "TEST" },
+      //   { name: "조민재", id: "131", department: "TEST" },
+      // ],
       currentPage: 1,
       friendsPerPage: 6,
 
@@ -188,29 +170,35 @@ export default {
   },
   methods: {
     // 현재 로그인한 사용자 id 받음
-    fetchCurrentUser() {
-      this.$root.$on("login-success", (studentid) => {
-        this.studentid = studentid;
-        this.fetchFriends();
-      });
-    },
-    // 현재 로그인한 사용자의 친구 목록 받음
-    fetchFriends() {
-      if (!this.studentid) {
-        return;
+    async fetchCurrentUser() {
+      try {
+        let response = await fetch("http://localhost:8000/currentuser");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        } else {
+          let data = await response.json();
+          this.currentUser = data.studentid;
+        }
+      } catch (error) {
+        console.log("There was a problem with fetch operation: ", error);
       }
-
-      fetch(
-        `http://localhost:8000/api/friends/friend_list?id=${this.studentid}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          if (data) {
+    },
+    async fetchFriends() {
+      if (this.currentUser) {
+        try {
+          let response = await fetch(
+            `http://localhost:8000/friends/${this.currentUser}`
+          );
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          } else {
+            let data = await response.json();
             this.friends = data;
-            console.log(this.studentid);
           }
-        })
-        .catch((err) => console.error(err));
+        } catch (error) {
+          console.log("There was a problem with fetch operation: ", error);
+        }
+      }
     },
 
     showFriendList() {
