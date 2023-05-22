@@ -1,4 +1,4 @@
-import { createStore } from "vuex";
+import { createStore, mapState } from "vuex";
 
 export default createStore({
   state: {
@@ -8,5 +8,8 @@ export default createStore({
     setStudentId(state, studentId) {
       state.studentId = studentId;
     },
+  },
+  getters: {
+    ...mapState(["studentId"]),
   },
 });

@@ -98,11 +98,11 @@
             <v-col v-for="(request, i) in paginatedRequests" :key="i" cols="4">
               <v-card>
                 <v-card-title>
-                  {{ request.id }}
+                  {{ request.name }}
                 </v-card-title>
-                <!-- <v-card-subtitle>
+                <v-card-subtitle>
                   Student ID: {{ request.id }}
-                </v-card-subtitle> -->
+                </v-card-subtitle>
                 <v-card-actions>
                   <v-btn
                     variant="outlined"
@@ -249,58 +249,41 @@ export default {
 
     // 친구 요청 수락 : 수락 버튼 눌렀을 때 API 통신 + UI 변경
     approveFriendRequest(index) {
+      this.friends.push(this.paginatedRequests[index]);
       const realIndex =
         (this.currentRequestPage - 1) * this.requestsPerPage + index;
+      this.requests.splice(realIndex, 1);
 
+      if (this.currentRequestPage > this.numberOfRequestPages) {
+        this.currentRequestPage--;
+      }
       fetch(
         `http://localhost:8000/api/friends/accept_request?sender=${this.paginatedRequests[index].id}&receiver=${this.studentid}`,
         {
           method: "PUT",
         }
-      )
-        .then((response) => {
-          if (response.ok) {
-            this.friends.push(this.paginatedRequests[index]);
-            this.requests.splice(realIndex, 1);
-            if (this.currentRequestPage > this.numberOfRequestPages) {
-              this.currentRequestPage--;
-            }
-          } else {
-            return response.json().then((error) => {
-              throw new Error(`Server responded with ${error.detail}`);
-            });
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      ).catch((error) => {
+        console.error("Error:", error);
+      });
     },
     // 친구 요청 거절 : 거절 버튼 눌렀을 때 API 통신 + UI 변경
     declineFriendRequest(index) {
       const realIndex =
         (this.currentRequestPage - 1) * this.requestsPerPage + index;
+      this.requests.splice(realIndex, 1);
+
+      if (this.currentRequestPage > this.numberOfRequestPages) {
+        this.currentRequestPage--;
+      }
 
       fetch(
         `http://localhost:8000/api/friends/delete_request?sender=${this.requests[realIndex].id}&receiver=${this.studentid}`,
         {
           method: "PUT",
         }
-      )
-        .then((response) => {
-          if (response.ok) {
-            this.requests.splice(realIndex, 1);
-            if (this.currentRequestPage > this.numberOfRequestPages) {
-              this.currentRequestPage--;
-            }
-          } else {
-            return response.json().then((error) => {
-              throw new Error(`Server responded with ${error.detail}`);
-            });
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      ).catch((error) => {
+        console.error("Error:", error);
+      });
     },
 
     prevPage() {
@@ -319,10 +302,7 @@ export default {
     },
 
     hideSearch(e) {
-      if (
-        this.$refs.searchBar &&
-        !this.$refs.searchBar.$el.contains(e.target)
-      ) {
+      if (!this.$refs.searchBar.$el.contains(e.target)) {
         this.showSearch = false;
       }
     },
@@ -330,18 +310,18 @@ export default {
       if (this.showSearch) {
         this.showSearch = false;
       } else {
-        this.$nextTick(() => {
+        setTimeout(() => {
           this.showSearch = true;
-        });
+        }, 0);
       }
     },
     toggleOtherSearch() {
       if (this.showOtherSearch) {
         this.showOtherSearch = false;
       } else {
-        this.$nextTick(() => {
+        setTimeout(() => {
           this.showOtherSearch = true;
-        });
+        }, 0);
       }
     },
     filteredSearchResults() {
@@ -404,7 +384,6 @@ export default {
   },
   created() {
     this.studentid = this.$store.state.studentId;
-    this.fetchFriendListAndRequests();
   },
 };
 </script>
