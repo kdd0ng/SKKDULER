@@ -302,7 +302,10 @@ export default {
     },
 
     hideSearch(e) {
-      if (!this.$refs.searchBar.$el.contains(e.target)) {
+      if (
+        this.$refs.searchBar &&
+        !this.$refs.searchBar.$el.contains(e.target)
+      ) {
         this.showSearch = false;
       }
     },
@@ -310,18 +313,18 @@ export default {
       if (this.showSearch) {
         this.showSearch = false;
       } else {
-        setTimeout(() => {
+        this.$nextTick(() => {
           this.showSearch = true;
-        }, 0);
+        });
       }
     },
     toggleOtherSearch() {
       if (this.showOtherSearch) {
         this.showOtherSearch = false;
       } else {
-        setTimeout(() => {
+        this.$nextTick(() => {
           this.showOtherSearch = true;
-        }, 0);
+        });
       }
     },
     filteredSearchResults() {
