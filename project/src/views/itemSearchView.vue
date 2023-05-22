@@ -222,6 +222,7 @@ export default {
     const pathname = url.pathname; // "/search/id=1"
     const id = pathname.substring(pathname.lastIndexOf('=') + 1);
     //console.log(id);
+    this.studentid = this.$store.state.studentId;
     this.fetchData(id);
   },
   watch: {
@@ -279,7 +280,7 @@ export default {
         });
     },
     addToMySchedule() {
-    const userId = 20211234; 
+    const userId = this.studentid; 
     const id = this.item.id;
     const isPrivate = this.toggleValue ? 1 : 0;
     const url = `http://127.0.0.1:8000/api/search/add?userid=${userId}&id=${id}&isPrivate=${isPrivate}`;
