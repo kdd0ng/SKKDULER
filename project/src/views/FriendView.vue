@@ -249,41 +249,58 @@ export default {
 
     // 친구 요청 수락 : 수락 버튼 눌렀을 때 API 통신 + UI 변경
     approveFriendRequest(index) {
-      this.friends.push(this.paginatedRequests[index]);
       const realIndex =
         (this.currentRequestPage - 1) * this.requestsPerPage + index;
-      this.requests.splice(realIndex, 1);
 
-      if (this.currentRequestPage > this.numberOfRequestPages) {
-        this.currentRequestPage--;
-      }
       fetch(
         `http://localhost:8000/api/friends/accept_request?sender=${this.paginatedRequests[index].id}&receiver=${this.studentid}`,
         {
           method: "PUT",
         }
-      ).catch((error) => {
-        console.error("Error:", error);
-      });
+      )
+        .then((response) => {
+          if (response.ok) {
+            this.friends.push(this.paginatedRequests[index]);
+            this.requests.splice(realIndex, 1);
+            if (this.currentRequestPage > this.numberOfRequestPages) {
+              this.currentRequestPage--;
+            }
+          } else {
+            return response.json().then((error) => {
+              throw new Error(`Server responded with ${error.detail}`);
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     },
     // 친구 요청 거절 : 거절 버튼 눌렀을 때 API 통신 + UI 변경
     declineFriendRequest(index) {
       const realIndex =
         (this.currentRequestPage - 1) * this.requestsPerPage + index;
-      this.requests.splice(realIndex, 1);
-
-      if (this.currentRequestPage > this.numberOfRequestPages) {
-        this.currentRequestPage--;
-      }
 
       fetch(
         `http://localhost:8000/api/friends/delete_request?sender=${this.requests[realIndex].id}&receiver=${this.studentid}`,
         {
           method: "PUT",
         }
-      ).catch((error) => {
-        console.error("Error:", error);
-      });
+      )
+        .then((response) => {
+          if (response.ok) {
+            this.requests.splice(realIndex, 1);
+            if (this.currentRequestPage > this.numberOfRequestPages) {
+              this.currentRequestPage--;
+            }
+          } else {
+            return response.json().then((error) => {
+              throw new Error(`Server responded with ${error.detail}`);
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     },
 
     prevPage() {
