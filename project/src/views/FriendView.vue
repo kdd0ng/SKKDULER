@@ -98,11 +98,11 @@
             <v-col v-for="(request, i) in paginatedRequests" :key="i" cols="4">
               <v-card>
                 <v-card-title>
-                  {{ request.name }}
+                  {{ request.id }}
                 </v-card-title>
-                <v-card-subtitle>
+                <!-- <v-card-subtitle>
                   Student ID: {{ request.id }}
-                </v-card-subtitle>
+                </v-card-subtitle> -->
                 <v-card-actions>
                   <v-btn
                     variant="outlined"
@@ -387,6 +387,7 @@ export default {
   },
   created() {
     this.studentid = this.$store.state.studentId;
+    this.fetchFriendListAndRequests();
   },
 };
 </script>
