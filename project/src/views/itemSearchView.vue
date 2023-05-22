@@ -279,7 +279,7 @@ export default {
         });
     },
     addToMySchedule() {
-    const userId = this.$store.getters.studentId; 
+    const userId = 20211234; 
     const id = this.item.id;
     const isPrivate = this.toggleValue ? 1 : 0;
     const url = `http://127.0.0.1:8000/api/search/add?userid=${userId}&id=${id}&isPrivate=${isPrivate}`;
