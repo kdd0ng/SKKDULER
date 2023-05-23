@@ -126,6 +126,7 @@
       location:"",
       description:"",
       total:"",
+      studentid:"",
       
 
     }),
@@ -172,12 +173,13 @@
       this.request_URL="".concat("http://127.0.0.1:8000/api/host/id=",this.deliver)
       this.getData()
       console.log(this.listItems)
+      this.studentid = this.$store.state.studentId;
     },
 
     computed: {
         
       request_URL2: function() {
-         return "".concat("http://127.0.0.1:8000/api/host/add?userid=2017314910","&id=",this.deliver)   
+         return "".concat("http://127.0.0.1:8000/api/host/add?userid=",this.studentid,"&id=",this.deliver)   
     },
 
 

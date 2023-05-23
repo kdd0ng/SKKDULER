@@ -194,7 +194,7 @@
         돌아가기
       </v-btn>
       <v-btn color='primary' variant="outlined" @click="postData">
-        내 일정에 추가하기
+        목록에 추가하기
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -426,6 +426,7 @@
       location:"",
       description:"",
       total:"",
+      studentid:"",
       
 
     }),
@@ -467,10 +468,14 @@
 
     },
 
+    mounted() {
+      this.studentid = this.$store.state.studentId;
+    },
+
     computed: {
         
         request_URL: function() {
-         return "".concat("http://127.0.0.1:8000/api/host/create?userid=2017314910","&title=",encodeURIComponent(this.title),"&start_date=",this.selected_start_year,"-",this.selected_start_month,"-",this.selected_start_date,"%20",this.selected_start_hour,"%3A",this.selected_start_min,"&end_date=",this.selected_end_year,"-",this.selected_end_month,"-",this.selected_end_date,"%20",this.selected_end_hour,"%3A",this.selected_end_min,"&location=",encodeURIComponent(this.location),"&description=",encodeURIComponent(this.description),"&total=",this.total)
+         return "".concat("http://127.0.0.1:8000/api/host/create?userid=",this.studentid,"&title=",encodeURIComponent(this.title),"&start_date=",this.selected_start_year,"-",this.selected_start_month,"-",this.selected_start_date,"%20",this.selected_start_hour,"%3A",this.selected_start_min,"&end_date=",this.selected_end_year,"-",this.selected_end_month,"-",this.selected_end_date,"%20",this.selected_end_hour,"%3A",this.selected_end_min,"&location=",encodeURIComponent(this.location),"&description=",encodeURIComponent(this.description),"&total=",this.total)
         },
         
         
