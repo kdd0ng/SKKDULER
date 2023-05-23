@@ -469,7 +469,7 @@
     },
 
     mounted() {
-      this.studentid = this.$store.state.studentId;
+      this.studentid = Number(this.$store.state.studentId);
     },
 
     computed: {
