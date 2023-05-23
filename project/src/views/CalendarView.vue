@@ -40,10 +40,8 @@
       <div class="dialog-container">
         <div class="dialog-content">
           <h2>일정 추가</h2>
-          <label for="event-title">제목:</label>
-          <input id="event-title" v-model="newEvent.title" type="text">
-          <label for="event-description">설명:</label>
-          <textarea id="event-description" v-model="newEvent.description"></textarea>
+          <label for="event-memo">설명:</label>
+          <textarea id="event-memo" v-model="newEvent.memo"></textarea>
           <label for="event-startdate">시작일시:</label>
           <input id="event-startdate" v-model="newEvent.starttime" type="datetime-local">
           <label for="event-enddate">종료일시:</label>
@@ -86,31 +84,31 @@
         </div>
         <div v-else>
           <div class="event">
-            <div class="event-date">{{ formatDate(selectedDate) }}</div>
-          </div>
-          <div>
-            <h2>예정된 공지사항</h2>
-              <ul>
-                <li v-for= "notification in event.notification_event" :key="notification.id" v-if="notification.date.toDateString() === selectedDate.toDateString()">
-                  <div>제목: {{ notification.title }}</div>
-                  <div>장소: {{ notification.location }}</div>
-                  <div>날짜: {{ notification.date }}</div>
-                  <div>URL: {{ notification.url }}</div>
-                </li>
-              </ul>
-            <h2>예정된 주최일정</h2>
-              <ul>
-                <li v-for= "hosted in event.hosted_event" :key="hosted.id" v-if="hosted.date.toDateString() === selectedDate.toDateString()">
-                </li>
-              </ul>
-            <h2>예정된 개인일정</h2>
-              <ul>
-                <li v-for= "personal in event.personal_event" :key="personal.id" v-if="personal.date.toDateString() === selectedDate.toDateString()">
-                  <div>설명: {{ personal.memo }}</div>
-                  <div>장소: {{ personal.location }}</div>
-                  <div>시작날짜: {{ personal.startdate }}</div>
-                </li>
-              </ul>
+            <div class="event-date">{{ formatDate(selectedDate) }}에 등록된 전체 일정입니다.</div>
+              <div>
+                <h2>예정된 공지사항</h2>
+                <ul>
+                  <li v-for= "notification in event.notification_event" :key="notification.id" v-if="notification.date.toDateString() === selectedDate.toDateString()">
+                    <div>제목: {{ notification.title }}</div>
+                    <div>장소: {{ notification.location }}</div>
+                    <div>날짜: {{ notification.date }}</div>
+                    <div>URL: {{ notification.url }}</div>
+                  </li>
+                </ul>
+                <h2>예정된 주최일정</h2>
+                <ul>
+                  <li v-for= "hosted in event.hosted_event" :key="hosted.id" v-if="hosted.date.toDateString() === selectedDate.toDateString()">
+                  </li>
+                </ul>
+                <h2>예정된 개인일정</h2>
+                <ul>
+                  <li v-for= "personal in event.personal_event" :key="personal.id" v-if="personal.date.toDateString() === selectedDate.toDateString()">
+                    <div>설명: {{ personal.memo }}</div>
+                    <div>장소: {{ personal.location }}</div>
+                    <div>시작날짜: {{ personal.startdate }}</div>
+                  </li>
+                </ul>
+              </div>
           </div>
         </div>
       </div>
@@ -124,38 +122,29 @@ export default {
     return {
       currentDate: new Date(),
       selectedDate: null,
-      calendarView: 'month', selectedDate: null,
+      calendarView: 'month', 
       dialog: false,
       toggleValue: false,
       toggleLabel: '공개',
       event: {
-        notification_event: [],
-        hosted_event: [],
-        personal_event: []},
+      notification_event: [],
+      hosted_event: [],
+      personal_event: []},
       newEvent: {
-        title: '새 일정',
-        description: '',
-        startdate: '',
+        id: '1',
+        location: '',
+        title: '',
         enddate: '',
-        location: ''
+        startdate: '',
+        memo: '',
+        isprivate: 0
       },
-      events: [
-        {
-          title: '중요한 일정',
-          description: '오늘은 중요한 일정이 있습니다.',
-          startdate: '2023-02-01',
-          location: '국제관'
-        },
-        {
-          title: '회의',
-          description: '회의가 있습니다.',
-          startdate: '2023-02-10',
-          location: '호암관'
-        }
-      ]
     };
   },
   computed: {
+    studentId() {
+      return this.$store.state.studentId;
+    },
     currentYear() {
       return this.currentDate.getFullYear();
     },
@@ -236,6 +225,10 @@ export default {
         this.toggleLabel = value ? '비공개' : '공개';
     }
   },
+  mounted() {
+    const date = '2023-05-15T14:00:00';
+    this.event = this.getEvent(date); //임의로 시간 정해둠
+  },
   methods: {
     prev() {
       if (this.calendarView === 'month') {
@@ -277,7 +270,7 @@ export default {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       return date.toLocaleDateString('ko-KR', options);
     },
-    getEventTitle(date) {
+    getEvent(date) {
     return events[date.toLocaleDateString('ko-KR', options)] || '오늘은 등록된 일정이 없습니다. 새로운 일정을 등록하세요!';
     },
     getWeekStartDate(date) {
@@ -292,54 +285,49 @@ export default {
     },
     closeDialog() {
       this.dialog = false;
-      this.title = '';
-      this.description = '';
-      this.startdate = '';
-      this.enddate = '';
-      this.location = '';
     },
-    addEvent() {
-      //events[this.date] = { title: this.title, description: this.description, startdate: this.startdate, enddate: this.enddate, location: this.location };
+    addEvent() {  //이 부분을 수정해야 개인일정이 추가됨
       this.closeDialog();
     },
 
+
     fetchCalendarItem() {
-        const data = {
-          id: this.studentid,
-        };
-        fetch(
-          `http://localhost:8000/api/calender/get_all?id=${this.studentid}`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            this.event.notification_event = data.notification_list.map((notification) => {
-              return {
-                id: notification.id,
-                title: notification.title,
-                location: notification.location,
-                date: notification.date,
-                url: notification.url
-              };
-            });
-            this.event.hosted_event = data.hosted_list.map((hosted) => {
-              return {
-                id: hosted.id,
-              };
-            });
-            this.event.personal_event = data.personal_list.map((personal) => {
-              return {
-                id: personal.id,
-                location: personal.location,
-                end_date: personal.end_date,
-                start_date: personal.start_date,
-                memo: personal.memo,
-              };
-            });
-          })
-          .catch((error) => {
-            console.error(error);
+      const data = {
+        id: this.studentid,
+      };
+      fetch(
+        `http://localhost:8000/api/calender/get_all?id=${this.studentid}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          this.event.notification_event = data.notification_list.map((notification) => {
+            return {
+              id: notification.id,
+              title: notification.title,
+              location: notification.location,
+              date: notification.date,
+              url: notification.url
+            };
           });
-      },
+          this.event.hosted_event = data.hosted_list.map((hosted) => {
+            return {
+              id: hosted.id,
+            };
+          });
+          this.event.personal_event = data.personal_list.map((personal) => {
+            return {
+              id: personal.id,
+              location: personal.location,
+              end_date: personal.end_date,
+              start_date: personal.start_date,
+              memo: personal.memo,
+            };
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
   },
 };
 </script>
@@ -453,56 +441,55 @@ export default {
   cursor: pointer;
 }
 
-  
 .dialog-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(219, 239, 218, 0.708);
-    z-index: 9999;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(219, 239, 218, 0.708);
+  z-index: 9999;
+}
+
 .dialog-container {
-    top: 50%;
-    left: 50%;
-    transform: translate(200%, 30%);
-    max-width: 400px;
-    background-color: #ffffff;
-    padding: 10px;
-    border-radius: 4px;
-    z-index: 10000;
-  }
-  
+  top: 50%;
+  left: 50%;
+  transform: translate(200%, 30%);
+  max-width: 400px;
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 4px;
+  z-index: 10000;
+}
+
 .dialog-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .dialog-content label {
-    margin-top: 10px;
-  }
-  
+  margin-top: 10px;
+}
+
 .dialog-content input,
 .dialog-content textarea {
-    width: 300px;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
+  width: 300px;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 .dialog-content button {
-    margin-top: 10px;
-    padding: 8px 16px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
 .btn-container {
     margin-top: 20px;
