@@ -93,7 +93,7 @@
                 <div>
                   <h2>예정된 공지사항</h2>
                   <ul>
-                    <li><div>제목: 2022학년도 7차 글로벌융합학부 비교과 특강</div></li>
+                    <li><div>제목: 2022학년도 6차 글로벌융합학부 비교과 특강</div></li>
                     <li><div>일시: 2022년 9월 15일 14시</div></li>
                     <li><div>장소: Webex 온라인 미팅</div></li>
                     <li><div>URL: https://cs.skku.edu/ko/news/notice/view/6840</div></li>
